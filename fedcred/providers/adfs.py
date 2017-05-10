@@ -58,8 +58,12 @@ class Adfs(object):
             #                         scheme=parsedurl.scheme,
             #                         netloc=parsedurl.netloc,
             #                         action=action)
-            response = session.post(action, data=payload_dict,
-                                    verify=self.sslverification)
+            if form_response.history:
+                session.post(form_response.url, data=payload_dict,
+                             verify=self.sslverification)
+            else:
+                response = session.post(action, data=payload_dict,
+                                        verify=self.sslverification)
             if response.status_code != 200:
                 sys.exit('There was a problem logging in via ADFS. HTTP '
                          'Status Code: %s' % (response.status_code))
